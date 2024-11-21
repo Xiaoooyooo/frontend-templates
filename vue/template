@@ -7,7 +7,7 @@ index.html
 package.json
 postcss.config.js
 README.md
-tailwind.config.js
+tailwind.config.ts
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
