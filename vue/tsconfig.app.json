@@ -4,11 +4,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "noEmit": true,
@@ -20,14 +16,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
+      "@/*": ["src/*"]
+    }
   },
-  "include": [
-    "env.d.ts",
-    "src/**/*.vue",
-    "src/**/*.ts",
-  ]
+  "include": ["env.d.ts", "src/**/*.vue", "src/**/*.ts"]
 }

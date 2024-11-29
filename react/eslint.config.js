@@ -8,7 +8,7 @@ import pluginPrettier from "eslint-plugin-prettier/recommended";
 /** @type {import("eslint").Linter.Config} */
 const config = [
   {
-    files: ["src/**/*.{ts,tsx}"],
+    files: ["**/*.{ts,tsx}"],
     languageOptions: {
       globals: globals.browser,
       parser: parserTs,

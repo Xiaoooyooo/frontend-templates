@@ -4,7 +4,5 @@
   "endOfLine": "auto",
   "printWidth": 80,
   "vueIndentScriptAndStyle": true,
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

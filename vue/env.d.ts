@@ -5,3 +5,5 @@ declare module "*.svg?component" {
   const C: FunctionalComponent<SVGAttributes>;
   export default C;
 }
+
+declare const Timer: ReturnType<typeof setTimeout | typeof setInterval>;
