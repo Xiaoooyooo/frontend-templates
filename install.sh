@@ -109,8 +109,6 @@ main() {
   if [ $? -ne 0 ]; then
     rm -rf $CWD
     exit 1
-  else
-    exit 0
   fi
 
   for file in "${files[@]}"
