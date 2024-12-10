@@ -1,20 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "group:allNonMajor"],
+  "extends": ["config:recommended"],
   "labels": ["dependencies"],
   "rangeStrategy": "replace",
   "automerge": true,
   "automergeType": "pr",
   "automergeStrategy": "merge-commit",
-  "requiredStatusChecks": null,
-  "branchConcurrentLimit": 5,
+  "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "matchDepTypes": ["devDependencies"],
       "automerge": true,
       "groupName": "Dev Dependencies",
       "rangeStrategy": "replace",
@@ -24,6 +20,5 @@
       "matchUpdateTypes": ["major"],
       "automerge": false
     }
-  ],
-  "rebaseWhen": "behind-base-branch"
+  ]
 }
