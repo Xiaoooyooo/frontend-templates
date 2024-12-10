@@ -8,7 +8,9 @@
     "composite": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "allowJs": true,
+    "noEmit": true
   },
   "include": ["*.config.ts", "*.config.js"]
 }

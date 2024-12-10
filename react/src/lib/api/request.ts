@@ -44,7 +44,7 @@ export default async function request(
     const abort = () =>
       !abortController.signal.aborted && abortController.abort();
     abortSignal = abortController.signal;
-    let timer: ReturnType<typeof setTimeout> | undefined = setTimeout(() => {
+    let timer: Timer | undefined = setTimeout(() => {
       abort();
       timer = undefined;
     }, timeout);
