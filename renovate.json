@@ -5,16 +5,13 @@
   "rangeStrategy": "replace",
   "automerge": true,
   "automergeType": "pr",
-  "automergeStrategy": "merge-commit",
+  "automergeStrategy": "squash",
   "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
-      "groupName": "Dev Dependencies",
-      "rangeStrategy": "replace",
-      "automergeStrategy": "squash"
+      "automerge": true
     },
     {
       "matchUpdateTypes": ["major"],
