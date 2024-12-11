@@ -5,7 +5,7 @@
   "rangeStrategy": "bump",
   "automerge": true,
   "automergeType": "pr",
-  "automergeStrategy": "merge-commit",
+  "automergeStrategy": "squash",
   "rebaseWhen": "behind-base-branch",
   "packageRules": [
     {
