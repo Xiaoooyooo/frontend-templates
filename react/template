@@ -25,6 +25,7 @@ src/lib/hooks/useLatestRef.ts
 src/lib/hooks/useMergeRefs.ts
 src/lib/hooks/useOnMounted.ts
 src/lib/hooks/useOnUpdated.ts
+src/lib/hooks/useFetch.ts
 
 .vscode/extensions.json
 .vscode/settings.json
