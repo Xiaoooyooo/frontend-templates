@@ -3,13 +3,14 @@ import useLatestRef from "./useLatestRef";
 
 export default function useOnUpdated(hook: () => void, deps: any[]) {
   const isMountedRef = useRef(false);
-  const hookRef = useLatestRef(hook);
 
   useEffect(() => {
     if (!isMountedRef.current) {
       isMountedRef.current = true;
       return;
     }
-    hookRef.current();
+    const cleanup = hook();
+
+    return cleanup;
   }, deps); // eslint-disable-line
 }

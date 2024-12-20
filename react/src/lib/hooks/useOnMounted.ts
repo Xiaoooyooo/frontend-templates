@@ -1,13 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-export default function useOnMounted(hook: () => void) {
-  const isMountedRef = useRef(false);
-
+export default function useOnMounted(hook: () => void | (() => void)) {
   useEffect(() => {
-    if (isMountedRef.current) {
-      return;
-    }
-    isMountedRef.current = true;
-    hook();
+    const cleanup = hook();
+
+    return cleanup;
   }, []); // eslint-disable-line
 }
