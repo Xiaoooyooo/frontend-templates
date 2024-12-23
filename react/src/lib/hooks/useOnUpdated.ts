@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import useLatestRef from "./useLatestRef";
 
 export default function useOnUpdated(hook: () => void, deps: any[]) {
   const isMountedRef = useRef(false);
