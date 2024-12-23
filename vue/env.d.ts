@@ -6,4 +6,4 @@ declare module "*.svg?component" {
   export default C;
 }
 
-declare const Timer: ReturnType<typeof setTimeout | typeof setInterval>;
+type Timer = ReturnType<typeof setTimeout | typeof setInterval>;
