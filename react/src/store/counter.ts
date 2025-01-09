@@ -1,4 +1,3 @@
-import { get } from "http";
 import { atom } from "jotai";
 
 export const count = atom(0);

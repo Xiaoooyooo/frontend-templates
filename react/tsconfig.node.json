@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "lib": ["es2023"],
+    "lib": [
+      "es2023"
+    ],
     "module": "ESNext",
     "target": "es2022",
     "moduleResolution": "Bundler",
@@ -8,9 +10,14 @@
     "composite": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "allowJs": true,
     "noEmit": true
   },
-  "include": ["*.config.ts", "*.config.js"]
+  "include": [
+    "*.config.ts",
+    "*.config.js"
+  ]
 }
