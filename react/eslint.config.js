@@ -1,20 +1,18 @@
 import globals from "globals";
-// import stylistic from "@stylistic/eslint-plugin";
+import tsEslint from "typescript-eslint";
+import pluginReact from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import tailwindcss from "eslint-plugin-tailwindcss";
 import pluginPrettier from "eslint-plugin-prettier/recommended";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
 
-/** @type {import("eslint").Linter.Config} */
+/** @type {import("eslint").Linter.Config[]} */
 const config = [
-  ...tseslint.config(tseslint.configs.recommended),
   {
     files: ["**/*.{js,ts,tsx}"],
     languageOptions: {
       sourceType: "module",
       globals: globals.browser,
-      parser: tseslint.parser,
+      parser: tsEslint.parser,
       parserOptions: {
         projectService: true,
         ecmaFeatures: { jsx: true },
@@ -27,6 +25,7 @@ const config = [
     plugins: { "react-hooks": reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
+  ...tsEslint.configs.recommended,
   ...tailwindcss.configs["flat/recommended"],
   pluginPrettier,
   { ignores: ["dist", "node_modules"] },
