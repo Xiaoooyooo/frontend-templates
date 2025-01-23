@@ -16,6 +16,7 @@ vite.config.ts
 src/assets/icons/vue.svg
 src/layout/BaseLayout.vue
 src/lib/utils/clsm.ts
+src/lib/compositions/useFetch.ts
 src/router/index.ts
 src/store/count.ts
 src/views/Home.vue

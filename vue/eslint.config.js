@@ -13,6 +13,7 @@ const config = [
       sourceType: "module",
       globals: globals.browser,
       parserOptions: {
+        /** @see https://eslint.vuejs.org/user-guide/#how-to-use-a-custom-parser */
         parser: tsEslint.parser,
         projectService: true,
         extraFileExtensions: [".vue"],
