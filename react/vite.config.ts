@@ -3,12 +3,14 @@ import url from "url";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     svgr({
       include: "**/*.svg?jsx",
       svgrOptions: {

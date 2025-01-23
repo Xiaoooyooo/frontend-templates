@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
-import "tailwindcss/tailwind.css";
+import "@/assets/style/tailwind.css";
 
 const root = createRoot(document.getElementById("root")!);
 
