@@ -7,13 +7,13 @@ index.html
 package.json
 postcss.config.js
 README.md
-tailwind.config.ts
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
 vite.config.ts
 
 src/assets/icons/vue.svg
+src/assets/style/tailwind.css
 src/layout/BaseLayout.vue
 src/lib/utils/clsm.ts
 src/lib/compositions/useFetch.ts

@@ -7,7 +7,6 @@ index.html
 package.json
 postcss.config.js
 README.md
-tailwind.config.ts
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
@@ -15,6 +14,7 @@ vite.config.ts
 
 src/main.tsx
 src/App.tsx
+src/assets/style/tailwind.css
 src/components/NotFound.tsx
 src/layout/BaseLayout.tsx
 src/router/index.tsx
