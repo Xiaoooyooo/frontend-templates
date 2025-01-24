@@ -7,6 +7,10 @@
   "automergeType": "pr",
   "automergeStrategy": "squash",
   "rebaseWhen": "behind-base-branch",
+  "timezone": "Asia/Shanghai",
+  "schedule": [
+    "* 22-23,0-8 * * *"
+  ],
   "packageRules": [
     {
       "matchDepTypes": ["dependencies", "devDependencies"],
