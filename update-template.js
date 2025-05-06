@@ -23,6 +23,11 @@ const Handlers = [
     test: /(template|pnpm-lock\.yaml)$/,
     ignore: true,
   },
+  {
+    // next
+    test: /(\.next|next-env\.d\.ts)/,
+    ignore: true
+  }
 ];
 
 const DefaultOut = (filename) =>
