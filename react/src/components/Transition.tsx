@@ -1,6 +1,7 @@
 import {
   cloneElement,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -12,13 +13,13 @@ import useMergeRefs from "@/lib/hooks/useMergeRefs";
 import clsm from "@/lib/utils/clsm";
 
 const STAGE = {
-  BeforeEnter: 1,
-  Entering: 2,
-  Entered: 3,
-  BeforeLeave: 4,
-  Leaving: 5,
-  Left: 6,
-  Unmounted: 7,
+  BeforeEnter: "BeforeEnter",
+  Entering: "Entering",
+  Entered: "Entered",
+  BeforeLeave: "BeforeLeave",
+  Leaving: "Leaving",
+  Left: "Left",
+  Unmounted: "Unmounted",
 };
 
 type TransitionClassProps = {
@@ -51,7 +52,7 @@ export default function Transition(props: TransitionProps) {
     leavingClassName,
     leftClassName,
   } = props;
-  const [stage, setStage] = useState<number>(
+  const [stage, setStage] = useState<string>(
     visible
       ? appear
         ? STAGE.Left
@@ -66,23 +67,42 @@ export default function Transition(props: TransitionProps) {
   const optionsRef = useLatestRef({ stage, unmountOnHide });
   const transitionEndCallbackRef = useRef<() => void>(null);
   const mergedRef = useMergeRefs(elRef, ref);
+  const transitionTimeoutRef = useRef<Timer | null>(null);
 
   const bindTransitionEndCallback = useCallback((callback: () => void) => {
     const el = elRef.current;
     if (!el) {
-      throw new Error("[Transition]: Can not access target's dom element.");
+      throw new Error("[Transition]: Cannot access target's DOM element.");
     }
+
     if (transitionEndCallbackRef.current) {
       el.removeEventListener("transitionend", transitionEndCallbackRef.current);
     }
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = null;
+    }
+
     const handler = () => {
-      console.log("transitionend");
       callback();
       transitionEndCallbackRef.current = null;
       el?.removeEventListener("transitionend", handler);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
     };
+
     transitionEndCallbackRef.current = handler;
     el.addEventListener("transitionend", handler);
+
+    // 动画超时兜底
+    const computedDuration =
+      parseFloat(getComputedStyle(el).transitionDuration || "0") * 1000;
+    const fallbackDuration = isNaN(computedDuration)
+      ? 300
+      : Math.max(computedDuration, 50);
+    transitionTimeoutRef.current = setTimeout(handler, fallbackDuration + 10);
   }, []);
 
   useLayoutEffect(() => {
@@ -115,6 +135,14 @@ export default function Transition(props: TransitionProps) {
       }
     }
   }, [visible, stage, optionsRef, bindTransitionEndCallback]);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   if (stage === STAGE.Unmounted) {
     return null;
