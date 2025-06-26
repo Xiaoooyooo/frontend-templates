@@ -19,7 +19,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@svgr/webpack": "^8.1.0",
-    "@tailwindcss/postcss": "^4.1.10",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^22.15.33",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -29,7 +29,7 @@
     "eslint-plugin-prettier": "^5.5.1",
     "prettier": "^3.6.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
-    "tailwindcss": "^4.1.10",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3"
   }
 }
