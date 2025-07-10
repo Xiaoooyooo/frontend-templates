@@ -12,7 +12,9 @@ README.md
 src/App.tsx
 src/assets/style/tailwind.css
 src/components/NotFound.tsx
-src/components/Transition.tsx
+src/components/Transition/index.ts
+src/components/Transition/Transition.tsx
+src/components/Transition/TransitionGroup.tsx
 src/layout/BaseLayout.tsx
 src/lib/api/request.ts
 src/lib/hooks/useFetch.ts
@@ -28,5 +30,4 @@ src/views/Home.tsx
 tsconfig.app.json
 tsconfig.json
 tsconfig.node.json
-tsconfig.node.tsbuildinfo
 vite.config.ts

@@ -27,6 +27,10 @@ const Handlers = [
     // next
     test: /(\.next|next-env\.d\.ts)/,
     ignore: true
+  },
+  {
+    test: /tsconfig\.node\.tsbuildinfo/,
+    ignore: true
   }
 ];
 
