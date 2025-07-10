@@ -22,7 +22,7 @@ const STAGE = {
   Unmounted: "Unmounted",
 };
 
-type TransitionClassProps = {
+export type TransitionClassProps = {
   [K in keyof Omit<
     typeof STAGE,
     "Unmounted"
@@ -35,6 +35,8 @@ type TransitionProps = Partial<TransitionClassProps> & {
   unmountOnHide?: boolean;
   appear?: boolean;
   mountOnBody?: boolean;
+  onEntered?: () => void;
+  onExited?: () => void;
 };
 
 export default function Transition(props: TransitionProps) {
@@ -44,6 +46,8 @@ export default function Transition(props: TransitionProps) {
     unmountOnHide,
     appear,
     mountOnBody,
+    onEntered,
+    onExited,
     // classes
     beforeEnterClassName,
     enteringClassName,
@@ -64,7 +68,7 @@ export default function Transition(props: TransitionProps) {
   const { className: _className, ref, ...rest } = children.props;
   const elRef = useRef<HTMLElement>(null);
 
-  const optionsRef = useLatestRef({ stage, unmountOnHide });
+  const optionsRef = useLatestRef({ unmountOnHide, onEntered, onExited });
   const transitionEndCallbackRef = useRef<() => void>(null);
   const mergedRef = useMergeRefs(elRef, ref);
   const transitionTimeoutRef = useRef<Timer | null>(null);
@@ -106,7 +110,7 @@ export default function Transition(props: TransitionProps) {
   }, []);
 
   useLayoutEffect(() => {
-    const { unmountOnHide } = optionsRef.current;
+    const { unmountOnHide, onEntered, onExited } = optionsRef.current;
     if (visible) {
       if (stage === STAGE.Left || stage === STAGE.Unmounted) {
         setStage(STAGE.BeforeEnter);
@@ -117,6 +121,7 @@ export default function Transition(props: TransitionProps) {
         setStage(STAGE.Entering);
       } else if (stage === STAGE.Entering) {
         bindTransitionEndCallback(() => {
+          onEntered?.();
           setStage(STAGE.Entered);
         });
       }
@@ -130,6 +135,7 @@ export default function Transition(props: TransitionProps) {
         setStage(STAGE.Leaving);
       } else if (stage === STAGE.Leaving) {
         bindTransitionEndCallback(() => {
+          onExited?.();
           setStage(unmountOnHide ? STAGE.Unmounted : STAGE.Left);
         });
       }
