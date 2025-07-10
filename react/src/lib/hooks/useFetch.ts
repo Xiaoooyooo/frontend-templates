@@ -1,25 +1,23 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useLatestRef from "./useLatestRef";
-import useOnMounted from "./useOnMounted";
 
-type FetchFnWithPayload<P = any, U = any> = (
-  payload: P,
-  signal: AbortSignal,
-) => Promise<U>;
-type FetchFnWithoutPayload<U = any> = (signal: AbortSignal) => Promise<U>;
-type GetPayload<F extends (payload: any, ...args: any) => any> =
-  Parameters<F>[0];
-type GetReturn<F extends (...args: any) => Promise<any>> = Awaited<
-  ReturnType<F>
->;
-
-type BaseOptions<R> = {
+type BaseOptions<P = void, R = unknown> = {
   immediate?: boolean;
+  initialPayload?: P;
   onSuccess?: (data: R) => void;
   onError?: (error: any) => void;
 };
 
 type BaseReturnValue<T> =
+  | {
+      // initial
+      data: null;
+      error: null;
+      isError: false;
+      isSuccess: false;
+      isLoading: false;
+      isIdle: true;
+    }
   | {
       // success
       data: T;
@@ -27,7 +25,7 @@ type BaseReturnValue<T> =
       isError: false;
       isSuccess: true;
       isLoading: false;
-      isPending: false;
+      isIdle: false;
     }
   | {
       // failed
@@ -36,110 +34,73 @@ type BaseReturnValue<T> =
       isError: true;
       isSuccess: false;
       isLoading: false;
-      isPending: false;
+      isIdle: false;
     }
   | {
-      // not triggered
-      data: null;
-      error: null;
-      isError: false;
-      isSuccess: false;
-      isLoading: false;
-      isPending: true;
-    }
-  | {
-      // first time loading
-      data: null;
-      error: null;
+      // loading
+      data: T | null;
+      error: any | null;
       isError: false;
       isSuccess: false;
       isLoading: true;
-      isPending: true;
-    }
-  | {
-      // loading, previous state is success
-      data: T;
-      error: null;
-      isError: false;
-      isSuccess: true;
-      isLoading: true;
-      isPending: false;
-    }
-  | {
-      // loading, previous state is failed
-      data: null;
-      error: any;
-      isError: true;
-      isSuccess: false;
-      isLoading: true;
-      isPending: false;
+      isIdle: false;
     };
 
-type OptionsWithPayload<P = unknown, U = unknown> = BaseOptions<U> & {
-  fetchFn: (payload: P, signal: AbortSignal) => Promise<U>;
-  initialPayload?: P;
+export type UseFetchContext<P = void> = {
+  signal: AbortSignal;
+  payload: P;
 };
 
-type OptionsWithoutPayload<U = unknown> = BaseOptions<U> & {
-  fetchFn: (signal: AbortSignal) => Promise<U>;
-  initialPayload?: undefined;
+type FetchFn<P = void, R = any> = (context: UseFetchContext<P>) => Promise<R>;
+
+type UseFetchOptions<P = void, R = unknown> = BaseOptions<P, R> & {
+  fetchFn: FetchFn<P, R>;
 };
 
-type ReturnWithPayload<P = unknown, U = unknown> = BaseReturnValue<U> & {
-  refetch: (payload: P) => void;
-  cancel: () => void;
-};
-type ReturnWithoutPayload<U = unknown> = BaseReturnValue<U> & {
-  refetch: () => void;
+type UseFetchReturn<P, R> = BaseReturnValue<R> & {
+  refetch: P extends void ? () => void : (payload: P) => void;
   cancel: () => void;
 };
 
-export default function useFetch<
-  F extends FetchFnWithoutPayload = FetchFnWithoutPayload,
-  U = GetReturn<F>,
->(options: OptionsWithoutPayload<U>): ReturnWithoutPayload<U>;
-export default function useFetch<
-  F extends FetchFnWithPayload = FetchFnWithPayload,
-  P = GetPayload<F>,
-  U = GetReturn<F>,
->(options: OptionsWithPayload<P, U>): ReturnWithPayload<P, U>;
-export default function useFetch(
-  options: OptionsWithoutPayload | OptionsWithPayload,
-) {
+export default function useFetch<P = void, R = unknown>(
+  options: UseFetchOptions<P, R>,
+): UseFetchReturn<P, R>;
+
+export default function useFetch(options: UseFetchOptions) {
+  const runId = useRef(0); // handle Race Condition
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [data, setData] = useState<any | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const abortControllerRef = useRef<AbortController>(undefined);
+  const [error, setError] = useState<any | null>(null);
+  const abortControllerRef = useRef<AbortController>(null);
 
   const optionsRef = useLatestRef(options);
 
   const handle = useCallback(
     (...args: any[]) => {
+      const id = ++runId.current;
       const { fetchFn, onSuccess, onError } = optionsRef.current;
       abortControllerRef.current = new AbortController();
       const signal = abortControllerRef.current.signal;
-      setLoading(true);
-      (!args.length
-        ? (fetchFn as FetchFnWithoutPayload)(signal)
-        : (fetchFn as FetchFnWithPayload)(args[0], signal)
-      )
+      setStatus("loading");
+      fetchFn({ payload: args[0], signal })
         .then((data) => {
+          // Another task has started, ignore the old state
+          if (id !== runId.current) return;
+          setData(data);
           setError(null);
-          setIsError(false);
-          setData(data as any);
-          setIsSuccess(true);
-          setLoading(false);
+          setStatus("success");
           onSuccess?.(data);
+          abortControllerRef.current = null;
         })
         .catch((error) => {
-          setError(error);
-          setIsError(true);
+          if (id !== runId.current) return;
+          setStatus("error");
           setData(null);
-          setIsSuccess(false);
-          setLoading(false);
+          setError(error);
           onError?.(error);
+          abortControllerRef.current = null;
         });
     },
     [optionsRef],
@@ -147,28 +108,35 @@ export default function useFetch(
 
   const cancel = useCallback(() => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort("Fetch Cancelled");
-      abortControllerRef.current = undefined;
+      abortControllerRef.current.abort(new Error("Fetch Cancelled"));
+      abortControllerRef.current = null;
     }
   }, []);
 
-  useOnMounted(() => {
-    if (options.immediate) {
-      options.initialPayload ? handle(options.initialPayload as any) : handle();
+  useEffect(() => {
+    const { immediate, initialPayload } = options;
+    if (immediate) {
+      initialPayload ? handle(initialPayload) : handle();
     }
+
     return () => {
       cancel();
     };
-  });
+  }, []);
+
+  const isIdle = status === "idle";
+  const isError = status === "error";
+  const isSuccess = status === "success";
+  const isLoading = status === "loading";
 
   return {
     data,
     error,
+    cancel,
+    isIdle,
     isError,
+    isLoading,
     isSuccess,
     refetch: handle,
-    isLoading: loading,
-    isPending: !isSuccess && !isError,
-    cancel,
   };
 }
