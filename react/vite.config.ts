@@ -6,6 +6,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const __DEV__ = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
   plugins: [
@@ -31,6 +32,7 @@ export default defineConfig({
       },
     }),
   ],
+  define: { __DEV__ },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

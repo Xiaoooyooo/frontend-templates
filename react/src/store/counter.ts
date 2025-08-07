@@ -1,22 +1,23 @@
-import { atom } from "jotai";
+import createStore from "./createStore";
 
-export const count = atom(0);
+type CounterState = {
+  count: number;
+  increment: () => void;
+  decrement: () => void;
+};
 
-// readonly atom
-export const double = atom((get) => {
-  return get(count) * 2;
-});
-
-// writeonly atom
-// updating the value using the write-only atom prevents the extra rerenders in our app.
-export const increment = atom(null, (get, set) => {
-  set(count, get(count) + 1);
-});
-
-export const asyncReadonlyAtom = atom(async (get) => get(count));
-
-// async writonly atom
-export const asyncAtom = atom(null, async (get, set) => {
-  // await something
-  set(count, get(count) + 1);
+export const useCounterStore = createStore<CounterState>((set, get, store) => {
+  return {
+    count: 0,
+    increment() {
+      set((state) => {
+        state.count += 1;
+      });
+    },
+    decrement() {
+      set((state) => {
+        state.count -= 1;
+      });
+    },
+  };
 });

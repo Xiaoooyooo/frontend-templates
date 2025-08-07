@@ -7,4 +7,5 @@ declare module "*.svg?jsx" {
   export default C;
 }
 
+declare const __DEV__: boolean;
 type Timer = ReturnType<typeof setTimeout | typeof setInterval>;
