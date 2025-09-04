@@ -2,18 +2,9 @@ REMOTE=https://raw.githubusercontent.com/Xiaoooyooo/frontend-templates/refs/head
 CWD=.
 APP_NAME="Frontend APP"
 
-file() {
-  echo $REMOTE$1
-}
-
-read_input() {
-  read -p "$1: " result </dev/tty
-  echo $result
-}
-
 whether() {
-  local r=$(read_input $1)
-  if [ -z $r ] || [ $r == "y" ] || [ $r == "Y" ]; then
+  read -p "$1: " ans</dev/tty
+  if [ -z $ans ] || [ $ans == "y" ] || [ $ans == "Y" ]; then
     return 0
   else
     return 1
@@ -22,7 +13,7 @@ whether() {
 
 download() {
   local retries=3
-  local fullpath=$(file $1)
+  local fullpath="$REMOTE$1"
   local dir=$(dirname $1)
   if ! [ -d $dir ]; then
     mkdir -p $dir
@@ -52,23 +43,24 @@ is_safe_dir() {
 }
 
 change_working_dir() {
-  local working_dir=$(read_input "请输入下载路径（默认当前文件夹）")
+  read -p "请输入下载路径（默认当前文件夹）：" working_dir</dev/tty
   if [ -z $working_dir ]; then
     working_dir="$(pwd)"
   fi;
   CWD=$working_dir
-  if ! $(is_safe_dir "$CWD"); then
+  if ! [ -d "$CWD" ]; then
+    mkdir -p "$CWD"
+  fi
+  cd "$CWD"
+  if [ -n "$(ls -A . 2>/dev/null)" ]; then
     if $(whether 目标路径已存在，是否清空该文件夹？); then
-      rm -rf "$CWD"
+      rm -rf ./* # remove regular files
+      rm -rf ./.* # remove hidden files
     else
       exit 1
     fi
   fi
-  mkdir -p "$CWD"
-  if [ $? -ne 0 ]; then
-    exit 1
-  fi
-  cd "$CWD"
+  
   APP_NAME=$(basename "$PWD")
 }
 
@@ -81,15 +73,19 @@ choose_template() {
   echo ""
   echo -e "    1. React"
   echo -e "    2. Vue"
+  echo -e "    3. Next"
   echo -e "    9. 退出脚本"
-  echo 
-  local select=$(read_input 请输入编号)
+  echo ""
+  read -p "请输入编号：" select</dev/tty
   case $select in
     1)
       REMOTE=${REMOTE}react/
     ;;
     2)
       REMOTE=${REMOTE}vue/
+    ;;
+    3)
+      REMOTE=${REMOTE}next/
     ;;
     9)
       exit 0
@@ -104,10 +100,10 @@ choose_template() {
 main() {
   choose_template
   change_working_dir
-  local files=($(curl $(file template) | awk '{sub(/\r$/, ""); print}'))
+  local files=($(curl ${REMOTE}template | awk '{sub(/\r$/, ""); print}'))
 
   if [ $? -ne 0 ]; then
-    rm -rf "$CWD"
+    echo 获取下载文件列表失败！
     exit 1
   fi
 
@@ -116,7 +112,6 @@ main() {
     download $file
     if [ $? -ne 0 ]; then
       echo download failed, plaease retry later.
-      rm -rf "$CWD"
       exit 1
     fi
 
