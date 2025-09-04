@@ -18,15 +18,12 @@ export default function TransitionGroup(props: TransitionGroupProps) {
     getList(children),
   );
   const visibleChildrenRef = useRef(new Set());
-  const prevRenderTimeRef = useRef<number>(null);
+
+  const childrenKeys = getList(children)
+    .map((child) => child.key)
+    .join("--");
 
   useLayoutEffect(() => {
-    const now = Date.now();
-    // 如果在 React 严格模式下，渲染两次间隔过短（< 16ms），跳过第二次渲染
-    if (prevRenderTimeRef.current && now - prevRenderTimeRef.current < 16) {
-      return;
-    }
-    prevRenderTimeRef.current = now;
     const _children = getList(children);
     const oldKeys = new Set(current.map((c) => getKey(c)));
     const newKeys = new Set(_children.map((c) => getKey(c)));
@@ -55,7 +52,7 @@ export default function TransitionGroup(props: TransitionGroupProps) {
 
     visibleChildrenRef.current = newKeys;
     setCurrent(newChildren);
-  }, [children]); // eslint-disable-line
+  }, [childrenKeys]); // eslint-disable-line
 
   return current.map((child) => (
     <Transition
