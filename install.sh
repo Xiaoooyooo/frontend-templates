@@ -57,19 +57,19 @@ change_working_dir() {
     working_dir="$(pwd)"
   fi;
   CWD=$working_dir
-  if ! $(is_safe_dir $CWD); then
+  if ! $(is_safe_dir "$CWD"); then
     if $(whether 目标路径已存在，是否清空该文件夹？); then
-      rm -rf $CWD
+      rm -rf "$CWD"
     else
       exit 1
     fi
   fi
-  mkdir -p $CWD
+  mkdir -p "$CWD"
   if [ $? -ne 0 ]; then
     exit 1
   fi
-  cd $CWD
-  APP_NAME=$(basename $PWD)
+  cd "$CWD"
+  APP_NAME=$(basename "$PWD")
 }
 
 light_cyan() {
@@ -107,7 +107,7 @@ main() {
   local files=($(curl $(file template) | awk '{sub(/\r$/, ""); print}'))
 
   if [ $? -ne 0 ]; then
-    rm -rf $CWD
+    rm -rf "$CWD"
     exit 1
   fi
 
@@ -116,7 +116,7 @@ main() {
     download $file
     if [ $? -ne 0 ]; then
       echo download failed, plaease retry later.
-      rm -rf $CWD
+      rm -rf "$CWD"
       exit 1
     fi
 

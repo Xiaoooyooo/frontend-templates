@@ -16,7 +16,7 @@ let output = "";
 /** @type {{test: RegExp; ignore?: boolean; out?: (filename: string) => string}[]} */
 const Handlers = [
   {
-    test: /[/\\]node_modules[\\/]/,
+    test: /[/\\]node_modules[\\/]|dist/,
     ignore: true,
   },
   {
