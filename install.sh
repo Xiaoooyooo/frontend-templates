@@ -54,7 +54,7 @@ is_safe_dir() {
 change_working_dir() {
   local working_dir=$(read_input "请输入下载路径（默认当前文件夹）")
   if [ -z $working_dir ]; then
-    working_dir=$(pwd)
+    working_dir="$(pwd)"
   fi;
   CWD=$working_dir
   if ! $(is_safe_dir $CWD); then
