@@ -22,7 +22,7 @@
     "@stylistic/eslint-plugin": "^5.5.0",
     "@tailwindcss/postcss": "^4.1.16",
     "@tailwindcss/vite": "^4.1.16",
-    "@types/node": "^22.18.12",
+    "@types/node": "^22.19.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.1",
