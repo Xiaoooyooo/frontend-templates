@@ -21,10 +21,7 @@ const config = [
     },
   },
   { plugins: { react: pluginReact } },
-  {
-    plugins: { "react-hooks": reactHooks },
-    rules: reactHooks.configs.recommended.rules,
-  },
+  reactHooks.configs.flat.recommended,
   ...tsEslint.configs.recommended,
   // ...tailwindcss.configs["flat/recommended"],
   pluginPrettier,
