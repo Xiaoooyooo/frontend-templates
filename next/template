@@ -1,3 +1,4 @@
+.npmrc
 .prettierrc
 .vscode/settings.json
 env.d.ts
