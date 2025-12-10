@@ -9,6 +9,7 @@
       "DOM",
       "DOM.Iterable"
     ],
+    "types": [],
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "noEmit": true,
