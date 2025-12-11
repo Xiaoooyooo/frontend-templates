@@ -16,7 +16,7 @@
     "pinia": "^3.0.4",
     "tailwind-merge": "^3.4.0",
     "vue": "^3.5.25",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.6.1",
