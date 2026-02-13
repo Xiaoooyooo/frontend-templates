@@ -82,7 +82,8 @@ class ApiClient {
     ) {
       body = data;
     } else if (data && typeof data === "object") {
-      _headers.append("Content-Type", "application/json");
+      if (!_headers.has("Content-Type"))
+        _headers.append("Content-Type", "application/json");
       body = JSON.stringify(data);
     }
 

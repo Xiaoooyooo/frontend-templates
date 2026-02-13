@@ -45,13 +45,14 @@ class ApiClient {
       stream = false,
     } = options;
 
-    let abortSignal: AbortSignal | undefined = signal;
+    let _signal = signal;
 
     if (timeout !== 0) {
       const abortController = new AbortController();
-      abortSignal = abortController.signal;
+      _signal = abortController.signal;
       const abort = function () {
-        if (!abortController.signal.aborted) abortController.abort();
+        if (abortController.signal.aborted) return;
+        abortController.abort();
       };
       const timer = setTimeout(() => {
         abort();
@@ -82,14 +83,15 @@ class ApiClient {
     ) {
       body = data;
     } else if (data && typeof data === "object") {
-      _headers.append("Content-Type", "application/json");
+      if (!_headers.has("Content-Type"))
+        _headers.append("Content-Type", "application/json");
       body = JSON.stringify(data);
     }
 
     const response = await fetch((this.options.baseURL ?? "") + url + search, {
       method,
       headers: _headers,
-      signal: abortSignal,
+      signal: _signal,
       body,
     });
 

@@ -21,7 +21,7 @@ src/components/Transition/Transition.tsx
 src/components/Transition/TransitionGroup.tsx
 src/context/MediaContext.tsx
 src/layout/BaseLayout.tsx
-src/lib/api/request.ts
+src/lib/api/client.ts
 src/lib/constants.ts
 src/lib/hooks/useFetch.ts
 src/lib/hooks/useLatestRef.ts

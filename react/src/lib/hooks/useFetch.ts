@@ -116,7 +116,7 @@ export default function useFetch(options: UseFetchOptions) {
   useEffect(() => {
     const { immediate, initialPayload } = options;
     if (immediate) {
-      initialPayload ? handle(initialPayload) : handle();
+      initialPayload ? handle(initialPayload) : handle(); // eslint-disable-line
     }
 
     return () => {
