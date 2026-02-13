@@ -74,6 +74,7 @@ choose_template() {
   echo -e "    1. React"
   echo -e "    2. Vue"
   echo -e "    3. Next"
+  echo -e "    4. Node Typescript"
   echo -e "    9. 退出脚本"
   echo ""
   read -p "请输入编号：" select</dev/tty
@@ -86,6 +87,9 @@ choose_template() {
     ;;
     3)
       REMOTE=${REMOTE}next/
+    ;;
+    4)
+      REMOTE=${REMOTE}node-typescript/
     ;;
     9)
       exit 0
