@@ -1,0 +1,9 @@
+.prettierrc
+.vscode/extensions.json
+.vscode/settings.json
+eslint.config.js
+gitignore
+package.json
+README.md
+src/main.ts
+tsconfig.json
