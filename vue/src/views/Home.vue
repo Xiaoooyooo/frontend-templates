@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center text-lg font-bold leading-8">
+  <h1 class="text-center text-lg leading-8 font-bold">
     <VueIcon class="m-auto" height="50" width="50" />
     <span>{{ message }}</span>
   </h1>
