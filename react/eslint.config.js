@@ -1,31 +1,16 @@
-import globals from "globals";
+import { defineConfig, globalIgnores } from "eslint/config";
 import tsEslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
-// import tailwindcss from "eslint-plugin-tailwindcss";
 import pluginPrettier from "eslint-plugin-prettier/recommended";
 
-/** @type {import("eslint").Linter.Config[]} */
-const config = [
-  {
-    files: ["**/*.{js,ts,tsx}"],
-    languageOptions: {
-      sourceType: "module",
-      globals: globals.browser,
-      parser: tsEslint.parser,
-      parserOptions: {
-        projectService: true,
-        ecmaFeatures: { jsx: true },
-        ecmaVersion: "latest",
-      },
-    },
-  },
-  { plugins: { react: pluginReact } },
-  reactHooks.configs.flat.recommended,
+export default defineConfig(
   ...tsEslint.configs.recommended,
-  // ...tailwindcss.configs["flat/recommended"],
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat["jsx-runtime"],
+  reactHooks.configs.flat.recommended,
   pluginPrettier,
-  { ignores: ["dist", "node_modules"] },
+  globalIgnores(["dist", "node_modules"]),
   {
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
@@ -33,6 +18,4 @@ const config = [
       "@typescript-eslint/no-unused-expressions": "off",
     },
   },
-];
-
-export default config;
+);
