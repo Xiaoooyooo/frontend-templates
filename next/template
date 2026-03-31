@@ -1,9 +1,9 @@
+.gitignore
 .npmrc
 .prettierrc
 .vscode/settings.json
 env.d.ts
 eslint.config.mjs
-gitignore
 next.config.ts
 package.json
 postcss.config.mjs

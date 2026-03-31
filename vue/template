@@ -1,10 +1,10 @@
 .browserslistrc
+.gitignore
 .prettierrc
 .vscode/extensions.json
 .vscode/settings.json
 env.d.ts
 eslint.config.js
-gitignore
 index.html
 package.json
 postcss.config.js
@@ -13,7 +13,7 @@ src/App.vue
 src/assets/icons/vue.svg
 src/assets/style/tailwind.css
 src/layout/BaseLayout.vue
-src/lib/api/request.ts
+src/lib/api/client.ts
 src/lib/compositions/useFetch.ts
 src/lib/utils/clsm.ts
 src/main.ts
@@ -21,6 +21,7 @@ src/router/index.ts
 src/store/count.ts
 src/views/Home.vue
 tsconfig.app.json
+tsconfig.app.tsbuildinfo
 tsconfig.json
 tsconfig.node.json
 vite.config.ts

@@ -31,6 +31,14 @@ const Handlers = [
   {
     test: /tsconfig\.node\.tsbuildinfo/,
     ignore: true
+  },
+  {
+    test: /\.env(\.deploy)?$/,
+    ignore: true,
+  },
+  {
+    test: /generated\/prisma/,
+    ignore: true,
   }
 ];
 
