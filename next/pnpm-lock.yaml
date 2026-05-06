@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       immer:
-        specifier: ^11.1.6
-        version: 11.1.6
+        specifier: ^11.1.7
+        version: 11.1.7
       next:
         specifier: 16.2.4
         version: 16.2.4(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -22,7 +22,7 @@ importers:
         version: 19.2.5(react@19.2.5)
       zustand:
         specifier: ^5.0.13
-        version: 5.0.13(@types/react@19.2.14)(immer@11.1.6)(react@19.2.5)
+        version: 5.0.13(@types/react@19.2.14)(immer@11.1.7)(react@19.2.5)
     devDependencies:
       '@svgr/webpack':
         specifier: ^8.1.0
@@ -1921,8 +1921,8 @@ packages:
     resolution: {integrity: sha512-Hs59xBNfUIunMFgWAbGX5cq6893IbWg4KnrjbYwX3tx0ztorVgTDA6B2sxf8ejHJ4wz8BqGUMYlnzNBer5NvGg==}
     engines: {node: '>= 4'}
 
-  immer@11.1.6:
-    resolution: {integrity: sha512-uwrF08UBQfxk49i9WcUeCx045wjB1zXEHNJmbYHPVVspxmjwSeWCoKbB8DEIvs3XkBJV6lcRAyLaWJ2+u3MMCw==}
+  immer@11.1.7:
+    resolution: {integrity: sha512-LFVFtAROHcDy1er5UI6nodRFnZ2SgdCXhfNSI+DpObO8N7Pur/muBGsjzH5wpnFHCYhYVQxZskCkV4koQ//3/Q==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -4911,7 +4911,7 @@ snapshots:
 
   ignore@7.0.5: {}
 
-  immer@11.1.6: {}
+  immer@11.1.7: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -5832,8 +5832,8 @@ snapshots:
 
   zod@4.1.12: {}
 
-  zustand@5.0.13(@types/react@19.2.14)(immer@11.1.6)(react@19.2.5):
+  zustand@5.0.13(@types/react@19.2.14)(immer@11.1.7)(react@19.2.5):
     optionalDependencies:
       '@types/react': 19.2.14
-      immer: 11.1.6
+      immer: 11.1.7
       react: 19.2.5
