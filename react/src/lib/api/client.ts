@@ -20,7 +20,7 @@ type StreamRequestOption = {
   stream: true;
 };
 
-class ApiClient {
+export class ApiClient {
   constructor(private readonly options: ApiClientOptions = {}) {}
 
   async request<T>(
@@ -38,30 +38,16 @@ class ApiClient {
     const {
       method = "get",
       timeout = this.options.timeout ?? 0,
-      signal,
+      signal: _signal,
       params,
-      headers,
+      headers: _headers,
       data,
       stream = false,
     } = options;
 
-    let _signal = signal;
-
-    if (timeout !== 0) {
-      const abortController = new AbortController();
-      _signal = abortController.signal;
-      const abort = function () {
-        if (abortController.signal.aborted) return;
-        abortController.abort();
-      };
-      const timer = setTimeout(() => {
-        abort();
-      }, timeout);
-      signal?.addEventListener("abort", function () {
-        if (abortController.signal.aborted) return;
-        abort();
-        clearTimeout(timer);
-      });
+    let signal = _signal;
+    if (_signal && timeout > 0) {
+      signal = AbortSignal.any([_signal, AbortSignal.timeout(timeout)]);
     }
 
     // handle querystring
@@ -72,7 +58,7 @@ class ApiClient {
     }
 
     // handle headers
-    const _headers = new Headers(headers);
+    const headers = new Headers(_headers);
 
     // handle body
     let body: BodyInit | undefined;
@@ -83,46 +69,40 @@ class ApiClient {
     ) {
       body = data;
     } else if (data && typeof data === "object") {
-      if (!_headers.has("Content-Type"))
-        _headers.append("Content-Type", "application/json");
+      if (!headers.has("Content-Type"))
+        headers.append("Content-Type", "application/json");
       body = JSON.stringify(data);
     }
 
     const response = await fetch((this.options.baseURL ?? "") + url + search, {
       method,
-      headers: _headers,
-      signal: _signal,
+      headers,
+      signal,
       body,
     });
 
+    let responseData: any;
     const contentType = response.headers.get("content-type") || "";
-    const isJson = /json/.test(contentType);
-    const isText = /text/.test(contentType);
-
-    if (!response.ok) {
-      throw await (isJson ? response.json() : response.text());
+    if (stream || /text\/event-stream/.test(contentType)) {
+      responseData = response.body;
+    } else if (/application\/json/.test(contentType)) {
+      responseData = await response.json();
+    } else if (/text\/.*/.test(contentType)) {
+      responseData = await response.text();
+    } else {
+      responseData = await response.blob();
     }
 
-    if (stream) return response.body;
+    if (!response.ok) {
+      throw responseData;
+    }
 
-    if (isJson) return response.json();
-
-    if (isText) return response.text();
-
-    return response.blob();
+    return responseData;
   }
 }
 
-export const apiClient = new ApiClient();
+const client = new ApiClient({
+  timeout: 10000,
+});
 
-export default async function request<T>(
-  url: string,
-  options?: RequestOption & NormalRequestOption,
-): Promise<T>;
-export default async function request(
-  url: string,
-  options?: RequestOption & StreamRequestOption,
-): Promise<ReadableStream<Uint8Array>>;
-export default function request(url: string, options?: any) {
-  return apiClient.request(url, options);
-}
+export default client;

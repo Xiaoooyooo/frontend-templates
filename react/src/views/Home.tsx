@@ -7,7 +7,8 @@ export default function Home() {
 
   useEffect(() => {
     console.log("count changed", count);
-  }, []);
+  }, [count]);
+
   return (
     <h1 className="p-10 text-center text-3xl" onClick={increment}>
       Welcome Home, Counter is: {count}

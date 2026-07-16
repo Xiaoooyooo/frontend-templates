@@ -2,7 +2,7 @@ import path from "path";
 import url from "url";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import babel from "@rolldown/plugin-babel";
 
@@ -12,7 +12,7 @@ const __DEV__ = process.env.NODE_ENV !== "production";
 export default defineConfig({
   plugins: [
     react(),
-    babel({ plugins: ["babel-plugin-react-compiler"] }),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
     svgr({
       include: "**/*.svg?jsx",

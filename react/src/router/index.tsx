@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter, type RouteObject } from "react-router";
 
-const BaseLayout = lazy(() => import("@/layout/BaseLayout"));
+const BaseLayout = lazy(() => import("@/components/layout/BaseLayout"));
 const Home = lazy(() => import("@/views/Home"));
 const NotFound = lazy(() => import("@/components/NotFound"));
 

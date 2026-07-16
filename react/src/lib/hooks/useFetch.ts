@@ -8,6 +8,8 @@ type BaseOptions<P = void, R = unknown> = {
   onError?: (error: any) => void;
 };
 
+type FetchStatus = "idle" | "loading" | "success" | "failure";
+
 type BaseReturnValue<T> =
   | {
       // initial
@@ -58,57 +60,72 @@ type UseFetchOptions<P = void, R = unknown> = BaseOptions<P, R> & {
 };
 
 type UseFetchReturn<P, R> = BaseReturnValue<R> & {
-  refetch: P extends void ? () => void : (payload: P) => void;
+  refetch: P extends void ? () => Promise<void> : (payload: P) => Promise<void>;
   cancel: () => void;
 };
+
+class CancelFetchError extends Error {
+  constructor() {
+    super("Fetch Cancelled");
+  }
+}
 
 export default function useFetch<P = void, R = unknown>(
   options: UseFetchOptions<P, R>,
 ): UseFetchReturn<P, R>;
 
-export default function useFetch(options: UseFetchOptions) {
+export default function useFetch(options: UseFetchOptions<any, any>) {
   const runId = useRef(0); // handle Race Condition
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-  const [data, setData] = useState<any | null>(null);
-  const [error, setError] = useState<any | null>(null);
+  const [state, setState] = useState<{
+    status: FetchStatus;
+    data: any;
+    error: any;
+  }>({
+    status: "idle",
+    data: null,
+    error: null,
+  });
   const abortControllerRef = useRef<AbortController>(null);
 
   const optionsRef = useLatestRef(options);
+  const statusRef = useLatestRef(state.status);
 
-  const handle = useCallback(
-    (...args: any[]) => {
-      const id = ++runId.current;
-      const { fetchFn, onSuccess, onError } = optionsRef.current;
-      abortControllerRef.current = new AbortController();
-      const signal = abortControllerRef.current.signal;
-      setStatus("loading");
-      fetchFn({ payload: args[0], signal })
-        .then((data) => {
-          // Another task has started, ignore the old state
-          if (id !== runId.current) return;
-          setData(data);
-          setError(null);
-          setStatus("success");
-          onSuccess?.(data);
-          abortControllerRef.current = null;
-        })
-        .catch((error) => {
-          if (id !== runId.current) return;
-          setStatus("error");
-          setData(null);
-          setError(error);
-          onError?.(error);
-          abortControllerRef.current = null;
-        });
-    },
-    [optionsRef],
-  );
+  const handle = useCallback(async (...args: any[]) => {
+    const id = ++runId.current;
+    const { fetchFn, onSuccess, onError } = optionsRef.current;
+    const prevStatus = statusRef.current;
+    if (abortControllerRef.current) {
+      // cancel previous pending request
+      abortControllerRef.current.abort(new CancelFetchError());
+    }
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+    setState((prev) => ({ ...prev, status: "loading" }));
+    let data: any = null;
+    let error: any = null;
+    let status: FetchStatus;
+    try {
+      data = await fetchFn({ payload: args[0], signal });
+      status = "success";
+    } catch (e) {
+      error = e;
+      status = "failure";
+    }
+    if (id !== runId.current) return; // ignore outdated request
+    if (error instanceof CancelFetchError) {
+      // ignore cancelled request
+      setState((prev) => ({ ...prev, status: prevStatus }));
+      return;
+    }
+    setState({ status, data, error });
+    if (data) onSuccess?.(data);
+    if (error) onError?.(error);
+    abortControllerRef.current = null;
+  }, []); // eslint-disable-line
 
   const cancel = useCallback(() => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort(new Error("Fetch Cancelled"));
+      abortControllerRef.current.abort(new CancelFetchError());
       abortControllerRef.current = null;
     }
   }, []);
@@ -122,10 +139,11 @@ export default function useFetch(options: UseFetchOptions) {
     return () => {
       cancel();
     };
-  }, []);
+  }, []); // eslint-disable-line
 
+  const { status, data, error } = state;
   const isIdle = status === "idle";
-  const isError = status === "error";
+  const isError = status === "failure";
   const isSuccess = status === "success";
   const isLoading = status === "loading";
 
