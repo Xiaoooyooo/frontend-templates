@@ -1,5 +1,5 @@
 import type { HTMLProps } from "react";
-import clsm from "@/lib/utils/clsm";
+import { clsm } from "@/lib/utils/helpers";
 
 type ContainerProps = HTMLProps<HTMLDivElement>;
 export default function Container(props: ContainerProps) {
@@ -7,7 +7,7 @@ export default function Container(props: ContainerProps) {
   return (
     <div
       className={clsm(
-        "mx-auto w-full px-4 lg:w-[1000px] xl:w-[1140px] xl:px-0",
+        "mx-auto w-full px-4 lg:w-250 xl:w-285 xl:px-0",
         className,
       )}
       {...rest}

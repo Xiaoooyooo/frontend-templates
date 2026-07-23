@@ -1,5 +1,6 @@
-import { useCounterStore } from "@/store/counter";
 import { useEffect } from "react";
+import useCounterStore from "@/store/counter";
+import { useThemeContext } from "@/context/ThemeContext";
 
 export default function Home() {
   const count = useCounterStore((state) => state.count);
@@ -10,8 +11,10 @@ export default function Home() {
   }, [count]);
 
   return (
-    <h1 className="p-10 text-center text-3xl" onClick={increment}>
-      Welcome Home, Counter is: {count}
-    </h1>
+    <div>
+      <h1 className="p-10 text-center text-3xl" onClick={increment}>
+        Welcome Home, Counter is: {count}
+      </h1>
+    </div>
   );
 }

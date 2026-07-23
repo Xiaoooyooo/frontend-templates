@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 export default function useMediaQuery(query: string) {
+  const [media] = useState(() => window.matchMedia(query));
   const [match, setMatch] = useState(() => {
-    return window.matchMedia(query).matches;
+    return media.matches;
   });
 
   useEffect(() => {
-    const media = window.matchMedia(query);
     function onChange() {
       setMatch(media.matches);
     }
@@ -14,7 +14,7 @@ export default function useMediaQuery(query: string) {
     return () => {
       media.removeEventListener("change", onChange);
     };
-  }, [query]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return match;
 }

@@ -18,11 +18,11 @@ src/components/ErrorBoundary.tsx
 src/components/layout/BaseLayout.tsx
 src/components/NavigationProgress.tsx
 src/components/NotFound.tsx
-src/components/Providers/MediaContextProvider.tsx
 src/components/Transition/index.ts
 src/components/Transition/Transition.tsx
 src/components/Transition/TransitionGroup.tsx
 src/context/MediaContext.tsx
+src/context/ThemeContext.tsx
 src/lib/api/client.ts
 src/lib/hooks/useFetch.ts
 src/lib/hooks/useLatestRef.ts
@@ -30,7 +30,9 @@ src/lib/hooks/useMediaQuery.ts
 src/lib/hooks/useMergeRefs.ts
 src/lib/hooks/useOnMounted.ts
 src/lib/hooks/useOnUpdated.ts
-src/lib/utils/clsm.ts
+src/lib/utils/eventEmitter.ts
+src/lib/utils/helpers.ts
+src/lib/utils/scheduler.ts
 src/main.tsx
 src/router/index.tsx
 src/store/counter.ts

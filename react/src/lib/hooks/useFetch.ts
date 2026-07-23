@@ -118,8 +118,8 @@ export default function useFetch(options: UseFetchOptions<any, any>) {
       return;
     }
     setState({ status, data, error });
-    if (data) onSuccess?.(data);
-    if (error) onError?.(error);
+    if (status === "success") onSuccess?.(data);
+    if (status === "failure") onError?.(error);
     abortControllerRef.current = null;
   }, []); // eslint-disable-line
 

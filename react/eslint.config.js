@@ -6,7 +6,15 @@ import pluginPrettier from "eslint-plugin-prettier/recommended";
 
 export default defineConfig(
   ...tsEslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+  // @see https://github.com/jsx-eslint/eslint-plugin-react#configuration-new-eslintconfigjs
+  {
+    ...pluginReact.configs.flat.recommended,
+    settings: {
+      react: {
+        version: "19",
+      },
+    },
+  },
   pluginReact.configs.flat["jsx-runtime"],
   reactHooks.configs.flat.recommended,
   pluginPrettier,

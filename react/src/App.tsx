@@ -1,11 +1,14 @@
 import { RouterProvider } from "react-router/dom";
 import router from "@/router";
-import MediaContextProvider from "./components/Providers/MediaContextProvider";
+import { ThemeProvider } from "@/context/ThemeContext";
+import { MediaContextProvider } from "@/context/MediaContext";
 
 export default function App() {
   return (
     <MediaContextProvider>
-      <RouterProvider router={router}></RouterProvider>
+      <ThemeProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </ThemeProvider>
     </MediaContextProvider>
   );
 }

@@ -23,10 +23,9 @@ const STAGE = {
 };
 
 export type TransitionClassProps = {
-  [K in keyof Omit<
-    typeof STAGE,
-    "Unmounted"
-  > as `${Uncapitalize<K>}ClassName`]: string;
+  [
+    K in keyof Omit<typeof STAGE, "Unmounted"> as `${Uncapitalize<K>}ClassName`
+  ]: string;
 };
 
 type TransitionProps = Partial<TransitionClassProps> & {

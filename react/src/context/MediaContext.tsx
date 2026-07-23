@@ -1,4 +1,5 @@
-import { createContext, use } from "react";
+import { createContext, use, type PropsWithChildren } from "react";
+import useMediaQuery from "@/lib/hooks/useMediaQuery";
 
 type IMediaContext = {
   isMobile: boolean;
@@ -10,4 +11,7 @@ export function useMediaContext() {
   return use(MediaContext);
 }
 
-export default MediaContext;
+export function MediaContextProvider({ children }: PropsWithChildren) {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  return <MediaContext value={{ isMobile }}>{children}</MediaContext>;
+}

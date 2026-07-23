@@ -6,7 +6,7 @@ type CounterState = {
   decrement: () => void;
 };
 
-export const useCounterStore = createStore<CounterState>((set, get, store) => {
+const useCounterStore = createStore<CounterState>((set, get, store) => {
   return {
     count: 0,
     increment() {
@@ -21,3 +21,5 @@ export const useCounterStore = createStore<CounterState>((set, get, store) => {
     },
   };
 });
+
+export default useCounterStore;
