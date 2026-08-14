@@ -132,3 +132,6 @@ dist
 
 # prisma
 src/generated/prisma
+
+# deployment archive
+*.tar.gz

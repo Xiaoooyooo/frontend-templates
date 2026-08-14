@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": [],
+    "types": [
+      "node"
+    ],
+    "esModuleInterop": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "rootDir": ".",
+    "noEmit": true
+  },
+  "include": [
+    "*.ts",
+    "*.js"
+  ]
+}

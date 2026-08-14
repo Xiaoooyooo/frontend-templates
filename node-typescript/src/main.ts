@@ -1,3 +1,4 @@
+import "./lib/resolve-env.js";
 import http from "http";
 
 http

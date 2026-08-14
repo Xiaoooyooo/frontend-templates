@@ -1,6 +1,6 @@
 set -e
 
-source ../.env.deploy.sh
+source ../.env.deploy
 
 bash build.sh
 
@@ -11,5 +11,7 @@ archive_name=$version.tar.gz
 tar -C dist -czvf $archive_name .
 
 scp -P $PORT -i $KEY $archive_name $USER@$HOST:$TARGET_DIR
+
+rm -f $archive_name
 
 # todo: add ssh command to deploy

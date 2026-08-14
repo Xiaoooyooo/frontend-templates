@@ -2,13 +2,14 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 
-let envDir = import.meta.dirname;
+let envDir = process.cwd();
 
 while (true) {
   try {
     const envPath = path.join(envDir, ".env");
     const stats = fs.statSync(envPath);
     if (stats.isFile()) {
+      console.log("find .env at:", envPath);
       dotenv.config({ path: envPath });
       break;
     }
@@ -16,7 +17,7 @@ while (true) {
       `No .env file found at ${envDir}, looking up parent directories`,
     );
   } catch {
-    let oldEnvDir = envDir;
+    const oldEnvDir = envDir;
     envDir = path.resolve(envDir, "..");
     // 检查是否已经到达根目录
     if (oldEnvDir === envDir) {
