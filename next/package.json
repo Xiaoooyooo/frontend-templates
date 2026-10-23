@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "immer": "^11.2.7",
+    "immer": "^11.2.9",
     "next": "16.4.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
