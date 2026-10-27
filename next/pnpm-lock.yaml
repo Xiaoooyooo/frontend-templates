@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       immer:
-        specifier: ^11.2.7
+        specifier: ^11.2.9
         version: 11.2.9
       next:
         specifier: 16.4.3
