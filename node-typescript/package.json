@@ -16,7 +16,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
-    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-prettier": "^10.1.9",
     "eslint-plugin-prettier": "^5.5.7",
     "prettier": "^3.10.1",
     "typescript": "^7.0.2",
